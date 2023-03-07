@@ -4,6 +4,7 @@ import logging
 from flask import request
 from flask_restful import Resource, abort
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from marshmallow import ValidationError
 
@@ -28,19 +29,26 @@ class CowsResource(Resource):
         can also filter by name or sex
         :return: Cow, 200 HTTP status code
         """
-        sex = request.args.get('sex')
-        name = request.args.get('name')
-        cow_id = request.args.get('cow_id')
-        cows = Cow.query.filter_by(**request.args).all()
+        try:
+            sex = request.args.get('sex')
+            name = request.args.get('name')
+            cow_id = request.args.get('cow_id')
+            cows = Cow.query.filter_by(**request.args).all()
 
-        cows_json = [ CowSchema().dump(self.cow_to_schema(cow)) for cow in cows]
-        logger.info("Cows successfully retrieved.", cows_json)
-        return cows_json
+            cows_json = [ CowSchema().dump(self.cow_to_schema(cow)) for cow in cows]
+            logger.info("Cows successfully retrieved.", cows_json)
+            return cows_json
+        except InvalidRequestError as e:
+            logger.warning(
+                f"You have passed an invalid query value. Error: {e}"
+            )
+
+            abort(400, message="You queried by an invalid query parameter, you can query with name, sex or cow_id!")
 
 
     def delete(self):
         id = request.args.get('id')
-        cow = Cow.query.get_or_404(id)
+        cow = Cow.query.get_or_404(id, "the cow you try to delete doesnt exist")
         db.session.delete(cow)
         db.session.commit()
         return '', 204
@@ -68,7 +76,7 @@ class CowsResource(Resource):
             cow_json = CowSchema().dump(self.cow_to_schema(cow))
         except IntegrityError as e:
             logger.warning(
-                f"Integrity Error, this cow is already in the database. Error: {e}"
+                f"Duplicate Error, this cow is already in the database. Error: {e}"
             )
 
             abort(500, message="Unexpected Error!")
@@ -77,9 +85,7 @@ class CowsResource(Resource):
 
     def patch(self):
         id = request.args.get('id')
-        cow = Cow.query.filter_by(cow_id=id).first()
-        if not cow:
-            raise NoResultFound()
+        cow = Cow.query.get_or_404(id, "the cow you try to edit doesnt exist")
 
         if 'name' in request.json:
             cow.name = request.json['name']

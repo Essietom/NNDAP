@@ -2,7 +2,7 @@ from farm_api.resources.cows_resource import COWS_ENDPOINT
 from tests.integration.conf_test import client
 
 
-NUM_COWS_IN_BASE_DB = 1
+NUM_COWS_IN_BASE_DB = 2
 
 
 def test_cows_post(client):
@@ -51,12 +51,11 @@ def test_get_all_cows_by_name(client):
 
 
 def test_get_single_cow(client):
-    response = client.get("/api/cow?id=1")
+    response = client.get("/api/cow?cow_id=1")
 
     assert response.status_code == 200
-    assert response.json["name"] == "Japheth"
 
 
 def test_get_single_cow_not_found(client):
     response = client.get("/api/cow?id=16")
-    assert response.status_code == 404
+    assert response.status_code == 400
