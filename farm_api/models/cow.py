@@ -25,19 +25,7 @@ class Cow(db.Model):
     milk_prod_amount_l = db.Column(db.Integer, nullable=False)
     has_calves = db.Column(db.Boolean, nullable=False)
 
-    # @property
-    # def weight(self):
-    #     return {'mass_kg': self.weight_mass_kg, 'last_measured': self.weight_last_measured}
-
-    # @property
-    # def feeding(self):
-    #     return {'amount_kg': self.feeding_amount_kg, 'cron_schedule': self.feeding_cron_schedule, 'last_measured' : self.feeding_last_measured}
-
-    # @property
-    # def milk_production(self):
-    #     return {'last_milk': self.milk_prod_last_milk, 'last_milk': self.milk_prod_last_milk, 'amount_l': self.milk_prod_amount_l}
-
-
+    
     def __repr__(self):
         return (
             f"**Cow** "

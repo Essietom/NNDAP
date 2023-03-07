@@ -24,39 +24,19 @@ class CowsResource(Resource):
         """
         CowsResource GET method. Retrieves all cows found in the Farm
 
-        :param id: Cow ID to retrieve, this path parameter is optional
+        :param cow_id: Cow ID to retrieve, this request parameter is optional
+        can also filter by name or sex
         :return: Cow, 200 HTTP status code
         """
-        id = request.args.get('id')
-        if not id:
-            return self._get_all_cows(), 200
-        else :
-            try:
-                return self._get_cow_by_id(), 200
-            except NoResultFound:
-                abort(404, message="Cow not found")
-
-    def _get_cow_by_id(self):
-        cow_id = request.args.get('id')
-        cow = Cow.query.filter_by(cow_id=cow_id).first()
-
-        if not cow:
-            raise NoResultFound()
-            
-        cow_json = CowSchema().dump(self.cow_to_schema(cow))
-
-        logger.info(f"Cow retrieved from database {cow_json}")
-        return cow_json
-
-    def _get_all_cows(self):
-      
         sex = request.args.get('sex')
         name = request.args.get('name')
+        cow_id = request.args.get('cow_id')
         cows = Cow.query.filter_by(**request.args).all()
 
         cows_json = [ CowSchema().dump(self.cow_to_schema(cow)) for cow in cows]
         logger.info("Cows successfully retrieved.", cows_json)
         return cows_json
+
 
     def delete(self):
         id = request.args.get('id')
@@ -88,7 +68,7 @@ class CowsResource(Resource):
             cow_json = CowSchema().dump(self.cow_to_schema(cow))
         except IntegrityError as e:
             logger.warning(
-                f"Integrity Error, this team is already in the database. Error: {e}"
+                f"Integrity Error, this cow is already in the database. Error: {e}"
             )
 
             abort(500, message="Unexpected Error!")

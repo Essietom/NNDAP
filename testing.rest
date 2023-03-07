@@ -31,16 +31,16 @@
 # GET http://127.0.0.1:5000/api/cow?name=Japheth
 
 
-# GET http://127.0.0.1:5000/api/cow?id=1
+# GET http://127.0.0.1:5000/api/cow?cow_id=2
 
 
 # DELETE http://127.0.0.1:5000/api/cow?id=1
 
-# PATCH http://127.0.0.1:5000/api/cow?id=1
-# content-type: application/json
+PATCH http://127.0.0.1:5000/api/cow?id=2
+content-type: application/json
 
-# {
-#     "name" : "Japheth",
-#     "sex" : "hermaphrodite"
-# }
+{
+    "name" : "Suli",
+    "sex" : "hermaphrodite"
+}
 
