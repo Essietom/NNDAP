@@ -1,0 +1,46 @@
+# POST http://127.0.0.1:5000/api/cow
+# content-type: application/json
+
+# {
+#     "name": "Camel",
+#     "sex": "female",
+#     "birthdate": "2023-03-07 11:50:22",
+#     "condition": "unhealthy",
+#     "weight": {
+#         "mass_kg": 101,
+#         "last_measured": "2023-03-07 11:50:22"
+#     },
+#     "feeding": {
+#         "amount_kg": 5,
+#         "cron_schedule": "*/3 * * * *",
+#         "last_measured": "2023-03-07 11:50:22"
+#     },
+#     "milk_production": {
+#         "last_milk": "2023-03-07 11:50:22",
+#         "cron_schedule": "*/3 * * * *",
+#         "amount_l": 10
+#     },
+#     "has_calves": true
+# }
+
+
+
+
+# GET http://127.0.0.1:5000/api/cow
+
+# GET http://127.0.0.1:5000/api/cow?name=Japheth
+
+
+# GET http://127.0.0.1:5000/api/cow?id=1
+
+
+# DELETE http://127.0.0.1:5000/api/cow?id=1
+
+# PATCH http://127.0.0.1:5000/api/cow?id=1
+# content-type: application/json
+
+# {
+#     "name" : "Japheth",
+#     "sex" : "hermaphrodite"
+# }
+

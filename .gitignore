@@ -1,0 +1,4 @@
+cow_api.log
+*.DS_Store
+*.pyc
+*/__pycache__/*
